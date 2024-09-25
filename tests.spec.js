@@ -5,9 +5,18 @@ describe("Case #001", () => {
   it("Contact email is visible", async function () {
     this.timeout(10000);
     let driver;
+    
+    before(async function () {
+      driver = await new Builder().forBrowser('chrome').build();
+    });
+  
+    after(async function () {
+      if (driver) {
+        await driver.quit();
+      }
+    });
 
     try {
-      driver = await new Builder().forBrowser("chrome").build();
       await driver.get("https://www.devchallenge.it/");
 
       //Click on the menu

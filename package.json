@@ -9,6 +9,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "glob": "^9.3.5",
+    "lru-cache": "^11.0.1",
     "selenium-webdriver": "^4.25.0"
   },
   "mocha": "10.7.3"

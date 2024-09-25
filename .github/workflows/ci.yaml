@@ -1,4 +1,4 @@
-name: Run Mocha Tests
+name: CI Pipeline
 
 on:
   push:
@@ -9,24 +9,35 @@ on:
       - main
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x]  # Node.js version
-    
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          npm install
+          npm install mocha
 
-      - name: Install Dependencies
-        run: npm install
+      # Install Chrome (this is needed for the tests)
+      - name: Install Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
 
-      - name: Run Tests
-        run: npx mocha tests.spec.js
+      # Install ChromeDriver (needed for Selenium to control Chrome)
+      - name: Set up ChromeDriver
+        uses: actions/setup-chromedriver@v1
+
+      # Run your Selenium-based tests using Mocha
+      - name: Run tests
+        run: npm test
+
+      # Debugging step to check Chrome and ChromeDriver versions
+      - name: Check Chrome and ChromeDriver versions
+        run: |
+          google-chrome --version
+          chromedriver --version
